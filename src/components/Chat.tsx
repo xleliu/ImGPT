@@ -1,26 +1,35 @@
-import { Stack, Textarea, Flex, CircularProgress, Text, Spacer, Button, Alert, useToast } from "@chakra-ui/react";
+import { Stack, Textarea, Flex, Spacer, Button, Alert, useToast, StackItem } from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
 import { useState } from "react";
 import { getInputValue, getApiKey } from "../utils/selector";
 
+interface MessageWithDate extends ChatCompletionRequestMessage {
+    date: string;
+}
+
 export default function () {
-    const apiKey = getApiKey();
+    let apiKey = getApiKey();
     const toast = useToast();
     const configuration = new Configuration({ apiKey: apiKey });
     const openai = new OpenAIApi(configuration);
 
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+    const [messageDates, setMessageDates] = useState<MessageWithDate[]>([]);
 
     async function handleClick() {
         if (apiKey == "") {
-            toast({
-                title: "缺少 api key",
-                status: "warning",
-                position: "top",
-                duration: 2000,
-            });
-            return;
+            apiKey = getApiKey();
+            if (apiKey == "") {
+                toast({
+                    title: "缺少 api key",
+                    status: "warning",
+                    position: "top",
+                    duration: 2000,
+                });
+                return;
+            }
         }
+
         const prompt = getInputValue("prompt");
         if (prompt === "") {
             return;
@@ -38,23 +47,13 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Stack style={{ overflow: "auto" }}>
-                {messages?.map((v: ChatCompletionRequestMessage) => (
-                    <ChatItem message={v} />
+            <Stack style={{ overflow: "auto" }} spacing={8}>
+                {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
+                    <ChatItem key={i} message={v} />
                 ))}
             </Stack>
             <Textarea placeholder="输入您的问题……" id="prompt" />
             <Flex align="end">
-                {/* <Stack
-                    direction="row"
-                    align="center"
-                    style={{
-                        visibility: "hidden",
-                    }}
-                >
-                    <CircularProgress isIndeterminate color="gray.400" size="4" />
-                    <Text>正在思考……</Text>
-                </Stack> */}
                 <Spacer />
                 <Button colorScheme="teal" size="md" onClick={handleClick}>
                     提交
@@ -64,7 +63,7 @@ export default function () {
     );
 }
 
-function ChatItem(props: { message: ChatCompletionRequestMessage }) {
+function ChatItem(props: { message: ChatCompletionResponseMessage }) {
     const message = props.message;
     return (
         <Alert
@@ -72,7 +71,10 @@ function ChatItem(props: { message: ChatCompletionRequestMessage }) {
             status={message.role == "user" ? "info" : "success"}
             variant="left-accent"
         >
-            {message.content}
+            <Stack>
+                <StackItem>{/* <Badge>{message.date}:</Badge> */}</StackItem>
+                <StackItem>{message.content.trim()}</StackItem>
+            </Stack>
         </Alert>
     );
 }

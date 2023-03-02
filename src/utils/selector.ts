@@ -8,7 +8,7 @@ export function getInputValue(id: string) {
 
 export function getApiKey() {
     const apiKey: string | undefined = localStorage.getItem("openai-key") as string;
-    if (apiKey === "undefined") {
+    if (apiKey === "undefined" || apiKey === null) {
         return "";
     }
     return apiKey;
