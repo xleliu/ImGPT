@@ -48,7 +48,7 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}>
+            <Box style={{ height: "calc(100vh - 280px)", overflowY: "auto" }}>
                 <Stack>
                     {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
                         <ChatItem key={i} message={v} date={messageDates[i].date} />

@@ -1,7 +1,7 @@
-# Tauri + React + Typescript
+# WIP
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+本地使用的 chatgpt
 
-## Recommended IDE Setup
+## 代理问题
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+域名已经被屏蔽，如果无法透过代理请求，检查你的代理设置里是不是跳过了 127.0.0.1、localhost。

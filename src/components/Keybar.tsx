@@ -1,4 +1,4 @@
-import { Editable, EditablePreview, EditableInput, FormControl, FormLabel } from "@chakra-ui/react";
+import { Editable, EditablePreview, EditableInput, HStack, Text } from "@chakra-ui/react";
 import { getApiKey } from "../utils/selector";
 import { useState } from "react";
 
@@ -23,11 +23,19 @@ export default function () {
     const [value, setValue] = useState(getValue());
 
     return (
-        <FormControl>
-            <FormLabel>当前秘钥：</FormLabel>
+        <HStack>
+            <Text
+                style={{
+                    width: "90px",
+                    textAlign: "left",
+                }}
+            >
+                当前秘钥：
+            </Text>
             <Editable
                 style={{
                     textAlign: "left",
+                    width: "calc(100vw - 90px)",
                 }}
                 placeholder="请输入你的秘钥……"
                 value={value}
@@ -38,6 +46,6 @@ export default function () {
                 <EditablePreview style={{ color: "gray" }} />
                 <EditableInput />
             </Editable>
-        </FormControl>
+        </HStack>
     );
 }
