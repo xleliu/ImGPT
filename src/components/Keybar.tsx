@@ -1,8 +1,14 @@
 import { Editable, EditablePreview, EditableInput, HStack, Text } from "@chakra-ui/react";
+import { useState, useContext, useEffect } from "react";
+import { SettingContext } from "../utils/settingContext";
 import { getApiKey } from "../utils/selector";
-import { useState } from "react";
 
 export default function () {
+    const { setApiKey } = useContext(SettingContext);
+    useEffect(() => {
+        setApiKey(getApiKey());
+    });
+
     const getValue = () => {
         const key = getApiKey();
         if (key == "") {
@@ -13,6 +19,7 @@ export default function () {
     const onSubmit = (value: string) => {
         localStorage.setItem("openai-key", value);
         setValue(getValue());
+        setApiKey(value);
     };
     const onChange = (value: string) => {
         setValue(value);

@@ -10,13 +10,12 @@ import {
     FormControl,
     FormLabel,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { SettingContext } from "../utils/settingContext";
 
-interface HeaderProps {
-    onTemperatureChange: (value: number) => void;
-}
+export default function () {
+    const { reqParams, setReqParams } = useContext(SettingContext);
 
-export default function (props: HeaderProps) {
     const [temperature, setTemperature] = useState(6);
     const [showTooltip, setShowTooltip] = useState(false);
 
@@ -33,7 +32,7 @@ export default function (props: HeaderProps) {
                         colorScheme="teal"
                         onChange={(v) => {
                             setTemperature(v);
-                            props.onTemperatureChange(v / 10);
+                            setReqParams({ ...reqParams, temperature: v / 10 });
                         }}
                         onMouseEnter={() => setShowTooltip(true)}
                         onMouseLeave={() => setShowTooltip(false)}

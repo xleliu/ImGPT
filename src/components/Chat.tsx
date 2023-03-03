@@ -1,25 +1,24 @@
 import { Stack, Textarea, Flex, Spacer, Button, Alert, useToast, StackItem, Box, Badge } from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
-import { useState } from "react";
-import { getInputValue, getApiKey } from "../utils/selector";
+import { useState, useContext, useEffect } from "react";
+import { getInputValue } from "../utils/selector";
 import { useMarkdown } from "../utils/useMarkdown";
-import Header from "./Header";
+import { SettingContext } from "../utils/settingContext";
 
 interface MessageDate {
     date: string;
 }
 
 export default function () {
-    const [temperature, setTemperature] = useState(0.6);
-
-    const handleTemperatureChange = (childTemperature: number) => {
-        setTemperature(childTemperature);
-    };
-    // 需要处理key刷新的问题
-    let apiKey = getApiKey();
     const toast = useToast();
-    const configuration = new Configuration({ apiKey: apiKey });
-    const openai = new OpenAIApi(configuration);
+    const { apiKey, reqParams } = useContext(SettingContext);
+
+    let openai: OpenAIApi;
+    useEffect(() => {
+        // apiKey 更新时更新设置
+        const configuration = new Configuration({ apiKey: apiKey });
+        openai = new OpenAIApi(configuration);
+    }, [apiKey]);
 
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     const [messageDates] = useState<MessageDate[]>([]);
@@ -42,8 +41,9 @@ export default function () {
             const completion = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo-0301",
                 messages: messages,
-                temperature: temperature,
+                temperature: reqParams.temperature,
             });
+            console.log(completion);
             messages.push(completion.data.choices[0].message as ChatCompletionResponseMessage);
         } catch (_) {
             toast({ title: "请求失败", status: "warning", position: "top", duration: 2000 });
@@ -59,27 +59,24 @@ export default function () {
     }
 
     return (
-        <>
-            <Header onTemperatureChange={handleTemperatureChange} />
-            <Stack spacing={4}>
-                <Box style={{ height: "calc(100vh - 360px)", overflowY: "auto" }}>
-                    <Stack>
-                        {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
-                            <ChatItem key={i} message={v} date={messageDates[i].date} />
-                        ))}
-                    </Stack>
-                </Box>
+        <Stack spacing={4}>
+            <Box style={{ height: "calc(100vh - 360px)", overflowY: "auto" }}>
                 <Stack>
-                    <Textarea placeholder="输入您的问题……" id="prompt" />
-                    <Flex align="end">
-                        <Spacer />
-                        <Button colorScheme="teal" size="md" onClick={handleClick}>
-                            提交
-                        </Button>
-                    </Flex>
+                    {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
+                        <ChatItem key={i} message={v} date={messageDates[i].date} />
+                    ))}
                 </Stack>
+            </Box>
+            <Stack>
+                <Textarea placeholder="输入您的问题……" id="prompt" />
+                <Flex align="end">
+                    <Spacer />
+                    <Button colorScheme="teal" size="md" onClick={handleClick}>
+                        提交
+                    </Button>
+                </Flex>
             </Stack>
-        </>
+        </Stack>
     );
 }
 
