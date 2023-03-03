@@ -25,6 +25,8 @@ export default function () {
     return (
         <HStack>
             <Text
+                as="b"
+                color="teal"
                 style={{
                     width: "90px",
                     textAlign: "left",
