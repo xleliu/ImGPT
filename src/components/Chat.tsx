@@ -1,7 +1,6 @@
 import { Stack, Textarea, Flex, Spacer, Button, Alert, useToast, StackItem, Box, Badge } from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
 import { useState, useContext, useEffect } from "react";
-import { getInputValue } from "../utils/selector";
 import { useMarkdown } from "../utils/useMarkdown";
 import { SettingContext } from "../utils/settingContext";
 
@@ -12,6 +11,7 @@ interface MessageDate {
 export default function () {
     const toast = useToast();
     const { apiKey, reqParams } = useContext(SettingContext);
+    const [prompt, setPrompt] = useState("");
 
     let openai: OpenAIApi;
     useEffect(() => {
@@ -19,6 +19,19 @@ export default function () {
         const configuration = new Configuration({ apiKey: apiKey });
         openai = new OpenAIApi(configuration);
     }, [apiKey]);
+
+    const handleKeyEnter = (e: { key: string }) => {
+        if (e.key === "Enter") {
+            handleClick();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("keypress", handleKeyEnter);
+        return () => {
+            window.removeEventListener("keypress", handleKeyEnter);
+        };
+    }, [handleKeyEnter]);
 
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     const [messageDates] = useState<MessageDate[]>([]);
@@ -29,10 +42,6 @@ export default function () {
             return;
         }
 
-        const prompt = getInputValue("prompt");
-        if (prompt === "") {
-            return;
-        }
         messages.push({ role: "user", content: prompt });
         messageDates.push({ date: new Date().toLocaleString() });
         // 产生一次copy才会重新渲染
@@ -56,11 +65,12 @@ export default function () {
         // });
         messageDates.push({ date: new Date().toLocaleString() });
         setMessages([...messages]);
+        setPrompt("");
     }
 
     return (
         <Stack spacing={4}>
-            <Box style={{ height: "calc(100vh - 360px)", overflowY: "auto" }}>
+            <Box style={{ height: "calc(100vh - 380px)", overflowY: "auto" }}>
                 <Stack>
                     {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
                         <ChatItem key={i} message={v} date={messageDates[i].date} />
@@ -68,7 +78,12 @@ export default function () {
                 </Stack>
             </Box>
             <Stack>
-                <Textarea placeholder="输入您的问题……" id="prompt" />
+                <Textarea
+                    placeholder="输入您的问题……"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value.trim())}
+                    resize="none"
+                />
                 <Flex align="end">
                     <Spacer />
                     <Button colorScheme="teal" size="md" onClick={handleClick}>

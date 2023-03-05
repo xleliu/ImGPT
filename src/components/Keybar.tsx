@@ -1,7 +1,7 @@
 import { Editable, EditablePreview, EditableInput, HStack, Text } from "@chakra-ui/react";
 import { useState, useContext, useEffect } from "react";
 import { SettingContext } from "../utils/settingContext";
-import { getApiKey } from "../utils/selector";
+import { getApiKey } from "../utils/localStorage";
 
 export default function () {
     const { setApiKey } = useContext(SettingContext);
