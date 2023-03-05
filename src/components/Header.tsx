@@ -5,13 +5,17 @@ import {
     Tooltip,
     SliderThumb,
     SliderTrack,
-    SimpleGrid,
-    Box,
     FormControl,
     FormLabel,
+    Editable,
+    EditablePreview,
+    EditableInput,
+    Grid,
+    GridItem,
 } from "@chakra-ui/react";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
+import { getApiKey } from "../utils/localStorage";
 
 export default function () {
     const { reqParams, setReqParams } = useContext(SettingContext);
@@ -19,9 +23,52 @@ export default function () {
     const [temperature, setTemperature] = useState(6);
     const [showTooltip, setShowTooltip] = useState(false);
 
+    const [secretValue, setSecretValue] = useState(getSecretValue());
+    const { setApiKey } = useContext(SettingContext);
+
+    useEffect(() => {
+        setApiKey(getApiKey());
+    });
+
+    const onSubmit = (value: string) => {
+        localStorage.setItem("openai-key", value);
+        setSecretValue(getSecretValue());
+        setApiKey(value);
+    };
+
+    function getSecretValue() {
+        const key = getApiKey();
+        if (key == "") {
+            return "";
+        }
+        return key.slice(0, 3) + "********************************" + key.slice(-4);
+    }
+
     return (
-        <SimpleGrid columns={5} spacing={5}>
-            <Box height="80px">
+        <Grid templateColumns="repeat(4, 1fr)" gap={10}>
+            <GridItem height="80px" colSpan={3}>
+                <FormControl>
+                    <FormLabel color="teal">当前秘钥</FormLabel>
+                    <Editable
+                        style={{
+                            textAlign: "left",
+                        }}
+                        placeholder="请输入你的秘钥……"
+                        value={secretValue}
+                        onSubmit={onSubmit}
+                        onChange={(v) => {
+                            setSecretValue(v);
+                        }}
+                        onEdit={() => {
+                            setSecretValue(getApiKey());
+                        }}
+                    >
+                        <EditablePreview style={{ color: "gray" }} />
+                        <EditableInput />
+                    </Editable>
+                </FormControl>
+            </GridItem>
+            <GridItem height="80px" colSpan={1}>
                 <FormControl>
                     <FormLabel color="teal">Temperature:</FormLabel>
                     <Slider
@@ -55,11 +102,7 @@ export default function () {
                         </Tooltip>
                     </Slider>
                 </FormControl>
-            </Box>
-            <Box height="80px"></Box>
-            <Box height="80px"></Box>
-            <Box height="80px"></Box>
-            <Box height="80px"></Box>
-        </SimpleGrid>
+            </GridItem>
+        </Grid>
     );
 }

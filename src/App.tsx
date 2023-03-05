@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Stack } from "@chakra-ui/react";
-import Keybar from "./components/Keybar";
 import Header from "./components/Header";
 import Chat from "./components/Chat";
 import "./App.css";
@@ -20,7 +19,6 @@ function App() {
             }}
         >
             <Stack spacing={4}>
-                <Keybar />
                 <Header />
                 <Chat />
             </Stack>

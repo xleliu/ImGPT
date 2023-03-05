@@ -14,17 +14,18 @@ export default function () {
     const [prompt, setPrompt] = useState("");
 
     let openai: OpenAIApi;
-    useEffect(() => {
-        // apiKey 更新时更新设置
+    const setupOpenAI = () => {
         const configuration = new Configuration({ apiKey: apiKey });
         openai = new OpenAIApi(configuration);
-    }, [apiKey]);
-
-    const handleKeyEnter = (e: { key: string }) => {
-        if (e.key === "Enter") {
-            handleClick();
-        }
     };
+
+    const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+    const [messageDates] = useState<MessageDate[]>([]);
+
+    setupOpenAI();
+    useEffect(() => {
+        setupOpenAI();
+    }, [apiKey]);
 
     useEffect(() => {
         window.addEventListener("keypress", handleKeyEnter);
@@ -33,8 +34,11 @@ export default function () {
         };
     }, [handleKeyEnter]);
 
-    const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
-    const [messageDates] = useState<MessageDate[]>([]);
+    function handleKeyEnter(e: { key: string }) {
+        if (e.key === "Enter") {
+            handleClick();
+        }
+    }
 
     async function handleClick() {
         if (apiKey == "") {
@@ -70,7 +74,7 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Box style={{ height: "calc(100vh - 380px)", overflowY: "auto" }}>
+            <Box style={{ height: "calc(100vh - 320px)", overflowY: "auto" }} bg="gray.100">
                 <Stack>
                     {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
                         <ChatItem key={i} message={v} date={messageDates[i].date} />
