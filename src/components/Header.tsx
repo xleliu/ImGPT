@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
-import { getApiKey } from "../utils/localStorage";
+import { updateApiKey, getConfig } from "../utils/localStorage";
 
 export default function () {
     return (
@@ -31,25 +31,28 @@ export default function () {
 }
 
 function FormApiKey(): JSX.Element {
-    const [secretValue, setSecretValue] = useState(getSecretValue());
+    // for localstorage
+    const config = getConfig();
+    // for form
+    const [value, setValue] = useState(secretValue(config.apiKey));
+    // for update openai config
     const { setApiKey } = useContext(SettingContext);
 
     useEffect(() => {
-        setApiKey(getApiKey());
+        setApiKey(config.apiKey);
     });
 
-    const onSubmit = (value: string) => {
-        localStorage.setItem("openai-key", value);
-        setSecretValue(getSecretValue());
-        setApiKey(value);
+    const onSubmit = (v: string) => {
+        updateApiKey(v);
+        setValue(secretValue(v));
+        setApiKey(v);
     };
 
-    function getSecretValue() {
-        const key = getApiKey();
-        if (key == "") {
+    function secretValue(v: string) {
+        if (v == "") {
             return "";
         }
-        return key.slice(0, 3) + "********************************" + key.slice(-4);
+        return v.slice(0, 3) + "********************************" + v.slice(-4);
     }
 
     return (
@@ -60,13 +63,13 @@ function FormApiKey(): JSX.Element {
                     textAlign: "left",
                 }}
                 placeholder="请输入你的秘钥……"
-                value={secretValue}
+                value={value}
                 onSubmit={onSubmit}
                 onChange={(v) => {
-                    setSecretValue(v);
+                    setValue(v);
                 }}
                 onEdit={() => {
-                    setSecretValue(getApiKey());
+                    setValue(config.apiKey);
                 }}
             >
                 <EditablePreview style={{ color: "gray" }} />

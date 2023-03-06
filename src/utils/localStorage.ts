@@ -1,14 +1,5 @@
 import { RequestParams } from "./settingContext";
 
-export function getApiKey() {
-    const apiKey: string | undefined = localStorage.getItem("openai-key") as string;
-    if (apiKey === "undefined" || apiKey === null) {
-        return "";
-    }
-    return apiKey;
-}
-
-/*
 export interface Config {
     apiKey: string;
     reqParams?: RequestParams;
@@ -37,4 +28,3 @@ export function updateReqParams(v: RequestParams) {
 function updateConfig(config: Config) {
     localStorage.setItem("config", JSON.stringify(config));
 }
-*/
