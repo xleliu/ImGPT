@@ -142,11 +142,12 @@ export default function () {
                             onClick={() => {
                                 setMessages([]);
                             }}
+                            w="100px"
                         >
                             重置会话
                         </Button>
-                        <Button colorScheme="teal" size="md" onClick={handleClick}>
-                            获取答案
+                        <Button colorScheme="teal" size="md" onClick={handleClick} w="100px">
+                            发送
                         </Button>
                     </ButtonGroup>
                 </Flex>
@@ -167,7 +168,9 @@ function ChatItem(props: { message: ChatCompletionResponseMessage; date: string 
             }}
         >
             <StackItem>
-                <Text color="teal">{message.role + " @ " + props.date + ":"}</Text>
+                <Text color={message.role == "user" ? "blue.600" : "green.600"}>
+                    {message.role + " @ " + props.date + ":"}
+                </Text>
             </StackItem>
             <StackItem>{content.includes("```") ? useMarkdown(content) : content}</StackItem>
         </Stack>
