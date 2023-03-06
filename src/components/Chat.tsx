@@ -122,7 +122,7 @@ export default function () {
                     style={{ fontSize: "0.9em" }}
                     placeholder="输入您的问题……"
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value.trim())}
+                    onChange={(e) => setPrompt(e.target.value.trimStart())}
                     resize="none"
                 />
                 <Flex>
