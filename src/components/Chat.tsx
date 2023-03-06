@@ -41,7 +41,7 @@ export default function () {
     }
 
     async function handleClick() {
-        if (apiKey == "") {
+        if (apiKey == "" || apiKey == undefined) {
             toast({ title: "缺少 api key", status: "warning", position: "top", duration: 2000 });
             return;
         }
@@ -103,7 +103,7 @@ function ChatItem(props: { message: ChatCompletionResponseMessage; date: string 
     const message = props.message;
     return (
         <Alert
-            style={{ textAlign: "left", whiteSpace: "pre-wrap" }}
+            style={{ textAlign: "left", whiteSpace: "pre-wrap", fontSize: "0.9em" }}
             status={message.role == "user" ? "info" : "success"}
             variant="left-accent"
         >

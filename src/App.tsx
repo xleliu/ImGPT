@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack } from "@chakra-ui/react";
 import Header from "./components/Header";
 import Chat from "./components/Chat";
 import "./App.css";
-import { SettingContext, RequestParams } from "./utils/settingContext";
+import { SettingContext, RequestParams, updateSettings, getSettings } from "./utils/settingContext";
 
 function App() {
-    const [apiKey, setApiKey] = useState("");
-    const [reqParams, setReqParams] = useState<RequestParams>({ temperature: 0.6 });
+    // for localstorage
+    const settings = getSettings();
+    const [apiKey, setApiKey] = useState(settings.apiKey);
+    const [reqParams, setReqParams] = useState(settings.reqParams as RequestParams);
+
+    useEffect(() => {
+        updateSettings({
+            apiKey: apiKey,
+            reqParams: reqParams,
+        });
+    }, [apiKey, reqParams]);
 
     return (
         <SettingContext.Provider

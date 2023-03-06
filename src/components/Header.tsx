@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
-import { updateApiKey, getConfig } from "../utils/localStorage";
 
 export default function () {
     return (
@@ -31,28 +30,21 @@ export default function () {
 }
 
 function FormApiKey(): JSX.Element {
-    // for localstorage
-    const config = getConfig();
-    // for form
-    const [value, setValue] = useState(secretValue(config.apiKey));
     // for update openai config
-    const { setApiKey } = useContext(SettingContext);
-
-    useEffect(() => {
-        setApiKey(config.apiKey);
-    });
+    const { apiKey, setApiKey } = useContext(SettingContext);
+    // for form
+    const [value, setValue] = useState(secretValue(apiKey));
 
     const onSubmit = (v: string) => {
-        updateApiKey(v);
         setValue(secretValue(v));
         setApiKey(v);
     };
 
     function secretValue(v: string) {
-        if (v == "") {
+        if (v == "" || v == undefined) {
             return "";
         }
-        return v.slice(0, 3) + "********************************" + v.slice(-4);
+        return v.slice(0, 3) + "*".repeat(44) + v.slice(-4);
     }
 
     return (
@@ -69,7 +61,7 @@ function FormApiKey(): JSX.Element {
                     setValue(v);
                 }}
                 onEdit={() => {
-                    setValue(config.apiKey);
+                    setValue(apiKey);
                 }}
             >
                 <EditablePreview style={{ color: "gray" }} />
@@ -81,7 +73,14 @@ function FormApiKey(): JSX.Element {
 
 function FormTemperature(): JSX.Element {
     const { reqParams, setReqParams } = useContext(SettingContext);
-    const [temperature, setTemperature] = useState(6);
+
+    let t: number;
+    if (reqParams == undefined || reqParams.temperature == undefined) {
+        t = 6;
+    } else {
+        t = reqParams.temperature == undefined ? 6 : reqParams.temperature * 10;
+    }
+    const [temperature, setTemperature] = useState(t);
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
@@ -89,7 +88,7 @@ function FormTemperature(): JSX.Element {
             <FormLabel color="teal">Temperature:</FormLabel>
             <Slider
                 id="slider"
-                defaultValue={6}
+                defaultValue={temperature}
                 min={0}
                 max={20}
                 colorScheme="teal"
