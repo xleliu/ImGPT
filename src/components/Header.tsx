@@ -65,7 +65,7 @@ function FormApiKey(): JSX.Element {
                 }}
             >
                 <EditablePreview style={{ color: "gray" }} />
-                <EditableInput />
+                <EditableInput style={{ fontSize: "0.9em" }} />
             </Editable>
         </FormControl>
     );

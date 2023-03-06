@@ -115,6 +115,7 @@ export default function () {
             </Box>
             <Stack>
                 <Textarea
+                    style={{ fontSize: "0.9em" }}
                     placeholder="输入您的问题……"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value.trim())}
