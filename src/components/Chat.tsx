@@ -55,7 +55,10 @@ export default function () {
     }
 
     async function handleClick() {
-        if (apiKey == "" || apiKey == undefined) {
+        if (prompt == "") {
+            return;
+        }
+        if (apiKey == "") {
             toast({ title: "缺少 api key", status: "warning", position: "top", duration: 2000 });
             return;
         }

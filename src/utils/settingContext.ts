@@ -6,7 +6,7 @@ export interface RequestParams {
 
 export interface Settings {
     apiKey: string;
-    reqParams?: RequestParams;
+    reqParams: RequestParams;
 }
 
 export const SettingContext = createContext<{
@@ -17,14 +17,18 @@ export const SettingContext = createContext<{
 }>({
     apiKey: "",
     setApiKey: () => {},
-    reqParams: { temperature: 0 },
+    reqParams: {} as RequestParams,
     setReqParams: () => {},
 });
 
 export function getSettings() {
     const settings: string | undefined = localStorage.getItem("settings") as string;
     if (settings === "undefined" || settings === null) {
-        return {} as Settings;
+        // default
+        return {
+            apiKey: "",
+            reqParams: { temperature: 0 },
+        };
     }
     return JSON.parse(settings) as Settings;
 }

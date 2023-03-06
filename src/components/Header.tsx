@@ -73,9 +73,7 @@ function FormApiKey(): JSX.Element {
 
 function FormTemperature(): JSX.Element {
     const { reqParams, setReqParams } = useContext(SettingContext);
-
-    const t = reqParams == undefined ? 0 : reqParams.temperature * 10;
-    const [temperature, setTemperature] = useState(t);
+    const [temperature, setTemperature] = useState(reqParams.temperature * 10);
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
