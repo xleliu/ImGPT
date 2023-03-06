@@ -10,6 +10,7 @@ import {
     Text,
     CircularProgress,
     Center,
+    ButtonGroup,
 } from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
 import { useState, useContext, useEffect } from "react";
@@ -133,9 +134,21 @@ export default function () {
                         </Text>
                     </Center>
                     <Spacer />
-                    <Button colorScheme="teal" size="md" onClick={handleClick}>
-                        提交
-                    </Button>
+                    <ButtonGroup gap="2">
+                        <Button
+                            colorScheme="teal"
+                            variant="outline"
+                            size="md"
+                            onClick={() => {
+                                setMessages([]);
+                            }}
+                        >
+                            重置会话
+                        </Button>
+                        <Button colorScheme="teal" size="md" onClick={handleClick}>
+                            获取答案
+                        </Button>
+                    </ButtonGroup>
                 </Flex>
             </Stack>
         </Stack>
@@ -144,6 +157,7 @@ export default function () {
 
 function ChatItem(props: { message: ChatCompletionResponseMessage; date: string }) {
     const message = props.message;
+    const content = props.message.content.trim().replace(/\n+/g, "\n");
     return (
         <Stack
             style={{
@@ -155,7 +169,7 @@ function ChatItem(props: { message: ChatCompletionResponseMessage; date: string 
             <StackItem>
                 <Text color="teal">{message.role + " @ " + props.date + ":"}</Text>
             </StackItem>
-            <StackItem>{useMarkdown(message.content.trim())}</StackItem>
+            <StackItem>{content.includes("```") ? useMarkdown(content) : content}</StackItem>
         </Stack>
     );
 }
