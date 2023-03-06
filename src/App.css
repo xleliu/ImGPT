@@ -1,7 +1,8 @@
 #root {
     min-height: 100vh;
-    max-width: 1280px;
+    /* max-width: 1280px; */
     margin: 0 auto;
     padding: 1rem 2rem;
     text-align: center;
+    overflow: hidden;
 }

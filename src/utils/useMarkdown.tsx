@@ -2,7 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const useMarkdown = (content: string): JSX.Element => {
     const markdown = (
@@ -16,7 +16,7 @@ export const useMarkdown = (content: string): JSX.Element => {
                     return !inline && match ? (
                         <SyntaxHighlighter
                             children={String(children).replace(/\n$/, "")}
-                            style={oneLight}
+                            style={solarizedlight}
                             language={match[1]}
                             PreTag="div"
                             {...props}
