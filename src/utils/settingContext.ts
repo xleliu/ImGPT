@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export interface RequestParams {
-    temperature?: number;
+    temperature: number;
 }
 
 export interface Settings {
@@ -17,7 +17,7 @@ export const SettingContext = createContext<{
 }>({
     apiKey: "",
     setApiKey: () => {},
-    reqParams: {},
+    reqParams: { temperature: 0 },
     setReqParams: () => {},
 });
 

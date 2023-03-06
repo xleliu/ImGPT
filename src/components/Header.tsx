@@ -13,7 +13,7 @@ import {
     Grid,
     GridItem,
 } from "@chakra-ui/react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
 
 export default function () {
@@ -74,12 +74,7 @@ function FormApiKey(): JSX.Element {
 function FormTemperature(): JSX.Element {
     const { reqParams, setReqParams } = useContext(SettingContext);
 
-    let t: number;
-    if (reqParams == undefined || reqParams.temperature == undefined) {
-        t = 6;
-    } else {
-        t = reqParams.temperature == undefined ? 6 : reqParams.temperature * 10;
-    }
+    const t = reqParams == undefined ? 0 : reqParams.temperature * 10;
     const [temperature, setTemperature] = useState(t);
     const [showTooltip, setShowTooltip] = useState(false);
 

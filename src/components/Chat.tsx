@@ -1,4 +1,16 @@
-import { Stack, Textarea, Flex, Spacer, Button, Alert, useToast, StackItem, Box, Badge } from "@chakra-ui/react";
+import {
+    Stack,
+    Textarea,
+    Flex,
+    Spacer,
+    Button,
+    useToast,
+    StackItem,
+    Box,
+    Text,
+    CircularProgress,
+    Center,
+} from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
 import { useState, useContext, useEffect } from "react";
 import { useMarkdown } from "../utils/useMarkdown";
@@ -12,6 +24,7 @@ export default function () {
     const toast = useToast();
     const { apiKey, reqParams } = useContext(SettingContext);
     const [prompt, setPrompt] = useState("");
+    const [loading, setLoading] = useState(false);
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -50,16 +63,22 @@ export default function () {
         messageDates.push({ date: new Date().toLocaleString() });
         // 产生一次copy才会重新渲染
         setMessages([...messages]);
+        setPrompt("");
+        setLoading(true);
         try {
-            const completion = await openai.createChatCompletion({
-                model: "gpt-3.5-turbo-0301",
-                messages: messages,
-                temperature: reqParams.temperature,
-            });
+            const completion = await openai.createChatCompletion(
+                {
+                    model: "gpt-3.5-turbo-0301",
+                    messages: messages,
+                    temperature: reqParams.temperature,
+                },
+                { timeout: 15000 }
+            );
             console.log(completion);
             messages.push(completion.data.choices[0].message as ChatCompletionResponseMessage);
         } catch (_) {
             toast({ title: "请求失败", status: "warning", position: "top", duration: 2000 });
+            setLoading(false);
             return;
         }
         // messages.push({
@@ -69,16 +88,29 @@ export default function () {
         // });
         messageDates.push({ date: new Date().toLocaleString() });
         setMessages([...messages]);
-        setPrompt("");
+        setLoading(false);
     }
 
     return (
         <Stack spacing={4}>
-            <Box style={{ height: "calc(100vh - 320px)", overflowY: "auto" }} bg="gray.100">
-                <Stack>
-                    {messages?.map((v: ChatCompletionResponseMessage, i: number) => (
-                        <ChatItem key={i} message={v} date={messageDates[i].date} />
-                    ))}
+            <Box
+                style={{ height: "calc(100vh - 320px)", overflowY: "auto" }}
+                bg="gray.100"
+                borderWidth="1px"
+                borderRadius="lg"
+                padding="15px"
+            >
+                <Stack spacing="6">
+                    {messages?.map(
+                        (v: ChatCompletionResponseMessage, i: number) => (
+                            <ChatItem key={i} message={v} date={messageDates[i].date} />
+                        )
+                        // v.role == "user" ? (
+                        //     <ChatItemUser key={i} message={v} date={messageDates[i].date} />
+                        // ) : (
+                        //     <ChatItemAssistant key={i} message={v} date={messageDates[i].date} />
+                        // )
+                    )}
                 </Stack>
             </Box>
             <Stack>
@@ -88,7 +120,17 @@ export default function () {
                     onChange={(e) => setPrompt(e.target.value.trim())}
                     resize="none"
                 />
-                <Flex align="end">
+                <Flex>
+                    <Center
+                        style={{
+                            visibility: loading ? "visible" : "hidden",
+                        }}
+                    >
+                        <CircularProgress isIndeterminate color="gray.400" size="4" style={{ marginRight: "5px" }} />
+                        <Text color="gray.500" fontSize="sm">
+                            正在获取答案……
+                        </Text>
+                    </Center>
                     <Spacer />
                     <Button colorScheme="teal" size="md" onClick={handleClick}>
                         提交
@@ -102,17 +144,20 @@ export default function () {
 function ChatItem(props: { message: ChatCompletionResponseMessage; date: string }) {
     const message = props.message;
     return (
-        <Alert
-            style={{ textAlign: "left", whiteSpace: "pre-wrap", fontSize: "0.9em" }}
-            status={message.role == "user" ? "info" : "success"}
-            variant="left-accent"
+        <Stack
+            style={{
+                textAlign: "left",
+                whiteSpace: "pre-wrap",
+                fontSize: "0.9em",
+            }}
         >
-            <Stack>
-                <StackItem>
-                    <Badge>{message.role + " @ " + props.date}:</Badge>
-                </StackItem>
-                <StackItem>{useMarkdown(message.content.trim())}</StackItem>
-            </Stack>
-        </Alert>
+            <StackItem>
+                <Text color="teal">{message.role + " @ " + props.date + ":"}</Text>
+            </StackItem>
+            <StackItem>{useMarkdown(message.content.trim())}</StackItem>
+        </Stack>
     );
 }
+function ChatItemAssistant(props: { message: ChatCompletionResponseMessage; date: string }) {}
+
+function ChatItemUser(props: { message: ChatCompletionResponseMessage; date: string }) {}
