@@ -76,7 +76,7 @@ export default function () {
                     messages: messages,
                     temperature: reqParams.temperature,
                 },
-                { timeout: 15000 }
+                { timeout: 30000 }
             );
             console.log(completion);
             messages.push(completion.data.choices[0].message as ChatCompletionResponseMessage);
@@ -98,7 +98,7 @@ export default function () {
     return (
         <Stack spacing={4}>
             <Box
-                style={{ height: "calc(100vh - 320px)", overflowY: "auto" }}
+                style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
                 bg="gray.100"
                 borderWidth="1px"
                 borderRadius="lg"
@@ -117,7 +117,7 @@ export default function () {
                     )}
                 </Stack>
             </Box>
-            <Stack>
+            <Stack spacing="3">
                 <Textarea
                     style={{ fontSize: "0.9em" }}
                     placeholder="输入您的问题……"
@@ -161,7 +161,7 @@ export default function () {
 
 function ChatItem(props: { message: ChatCompletionResponseMessage; date: string }) {
     const message = props.message;
-    const content = props.message.content.trim().replace(/\n+/g, "\n");
+    const content = props.message.content.trim();
     return (
         <Stack
             style={{
