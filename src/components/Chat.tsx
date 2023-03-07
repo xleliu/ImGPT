@@ -29,7 +29,7 @@ export default function () {
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // const messagesEndRef = useRef<null | HTMLDivElement>(null);
+    const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -41,9 +41,12 @@ export default function () {
     // 用于展示
     const [messageStack, setMessageStack] = useState<MessageWithDate[]>([]);
 
-    // useEffect(() => {
-    //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    // }, [messageStack]);
+    useEffect(() => {
+        // onChange events seem to block certain transitions
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+    }, [messageStack]);
 
     setupOpenAI();
     useEffect(() => {
@@ -71,7 +74,8 @@ export default function () {
             toast({ title: "缺少 api key", status: "warning", position: "top", duration: 2000 });
             return;
         }
-        const m: ChatCompletionRequestMessage = { role: "user", content: prompt };
+        let m: ChatCompletionRequestMessage;
+        m = { role: "user", content: prompt };
         messages.push(m);
         messageStack.push({ ...m, date: new Date().toLocaleString() });
         // 产生一次copy才会重新渲染
@@ -90,14 +94,17 @@ export default function () {
                 { timeout: 30000 }
             );
             console.log(completion);
-            const m: ChatCompletionRequestMessage = completion.data.choices[0].message as ChatCompletionRequestMessage;
-            messages.push(m);
-            messageStack.push({ ...m, date: new Date().toLocaleString() });
+            m = completion.data.choices[0].message as ChatCompletionRequestMessage;
         } catch (_) {
             toast({ title: "请求失败", status: "warning", position: "top", duration: 2000 });
             setLoading(false);
             return;
         }
+        // await sleep(3000);
+        // m = { role: "system", content: "1234\n\n1234" };
+
+        messages.push(m);
+        messageStack.push({ ...m, date: new Date().toLocaleString() });
 
         setMessageStack([...messageStack]);
         setLoading(false);
@@ -116,8 +123,8 @@ export default function () {
                     {messageStack?.map((v: MessageWithDate, i: number) => (
                         <ChatItem key={i} message={v} />
                     ))}
-                    {/* <div ref={messagesEndRef} /> */}
                 </Stack>
+                <div ref={messagesEndRef} />
             </Box>
             <Stack spacing="3">
                 <Textarea
@@ -198,4 +205,8 @@ function ChatItem(props: { message: MessageWithDate }) {
             {message.resetContext ? <Divider /> : null}
         </>
     );
+}
+
+function sleep(time: number) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
