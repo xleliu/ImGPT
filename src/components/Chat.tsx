@@ -46,7 +46,7 @@ export default function () {
         setTimeout(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
-    }, [messageStack]);
+    }, [messages, messageStack]);
 
     setupOpenAI();
     useEffect(() => {
@@ -202,7 +202,7 @@ function ChatItem(props: { message: MessageWithDate }) {
                 </StackItem>
                 <StackItem>{content.includes("```") ? useMarkdown(content) : content}</StackItem>
             </Stack>
-            {message.resetContext ? <Divider /> : null}
+            {message.resetContext ? <Divider borderColor="gray.500" borderStyle="dashed" /> : null}
         </>
     );
 }
