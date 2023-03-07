@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "ImGPT",
-    "version": "0.0.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -40,11 +40,11 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "imgpt",
+        "title": "ImGPT",
         "width": 800,
         "height": 680,
         "minWidth": 800,
-        "minHeight": 600
+        "minHeight": 680
       }
     ]
   }

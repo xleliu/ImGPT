@@ -1,6 +1,6 @@
 [package]
-authors = ["you"]
-description = "A Tauri App"
+authors = ["scholer"]
+description = "An application use openai api like instant message"
 edition = "2021"
 license = ""
 name = "imgpt"
