@@ -4,33 +4,43 @@ export interface RequestParams {
     temperature: number;
 }
 
-export interface Settings {
+export interface Config {
     apiKey: string;
+    enableContext: boolean;
+}
+
+export interface Settings {
+    config: Config;
     reqParams: RequestParams;
 }
 
 export const SettingContext = createContext<{
-    apiKey: string;
-    setApiKey: (apiKey: string) => void;
+    config: Config;
+    setConfig: (config: Config) => void;
     reqParams: RequestParams;
     setReqParams: (reqParams: RequestParams) => void;
 }>({
-    apiKey: "",
-    setApiKey: () => {},
+    config: {} as Config,
+    setConfig: () => {},
     reqParams: {} as RequestParams,
     setReqParams: () => {},
 });
 
 export function getSettings() {
+    const defaultSetting: Settings = {
+        config: { apiKey: "", enableContext: false },
+        reqParams: { temperature: 0 },
+    };
     const settings: string | undefined = localStorage.getItem("settings") as string;
     if (settings === "undefined" || settings === null) {
         // default
-        return {
-            apiKey: "",
-            reqParams: { temperature: 0 },
-        };
+        return defaultSetting;
     }
-    return JSON.parse(settings) as Settings;
+    try {
+        return JSON.parse(settings) as Settings;
+    } catch (_) {
+        return defaultSetting;
+    }
 }
 
 export function updateSettings(settings: Settings) {

@@ -23,13 +23,13 @@ interface MessageDate {
 
 export default function () {
     const toast = useToast();
-    const { apiKey, reqParams } = useContext(SettingContext);
+    const { config, reqParams } = useContext(SettingContext);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
-        const configuration = new Configuration({ apiKey: apiKey });
+        const configuration = new Configuration({ apiKey: config.apiKey });
         openai = new OpenAIApi(configuration);
     };
 
@@ -39,7 +39,7 @@ export default function () {
     setupOpenAI();
     useEffect(() => {
         setupOpenAI();
-    }, [apiKey]);
+    }, [config.apiKey]);
 
     useEffect(() => {
         window.addEventListener("keypress", handleKeyEnter);
@@ -58,7 +58,7 @@ export default function () {
         if (prompt == "") {
             return;
         }
-        if (apiKey == "") {
+        if (config.apiKey == "") {
             toast({ title: "缺少 api key", status: "warning", position: "top", duration: 2000 });
             return;
         }
@@ -75,6 +75,7 @@ export default function () {
                     model: "gpt-3.5-turbo-0301",
                     messages: messages,
                     temperature: reqParams.temperature,
+                    // stream: true,
                 },
                 { timeout: 30000 }
             );

@@ -8,21 +8,21 @@ import { SettingContext, RequestParams, updateSettings, getSettings } from "./ut
 function App() {
     // for localstorage
     const settings = getSettings();
-    const [apiKey, setApiKey] = useState(settings.apiKey);
+    const [config, setConfig] = useState(settings.config);
     const [reqParams, setReqParams] = useState(settings.reqParams as RequestParams);
 
     useEffect(() => {
         updateSettings({
-            apiKey: apiKey,
+            config: config,
             reqParams: reqParams,
         });
-    }, [apiKey, reqParams]);
+    }, [config, reqParams]);
 
     return (
         <SettingContext.Provider
             value={{
-                apiKey,
-                setApiKey,
+                config,
+                setConfig,
                 reqParams,
                 setReqParams,
             }}

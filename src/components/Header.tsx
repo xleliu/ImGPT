@@ -12,6 +12,7 @@ import {
     EditableInput,
     Grid,
     GridItem,
+    Switch,
 } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
@@ -31,13 +32,13 @@ export default function () {
 
 function FormApiKey(): JSX.Element {
     // for update openai config
-    const { apiKey, setApiKey } = useContext(SettingContext);
+    const { config, setConfig } = useContext(SettingContext);
     // for form
-    const [value, setValue] = useState(secretValue(apiKey));
+    const [value, setValue] = useState(secretValue(config.apiKey));
 
     const onSubmit = (v: string) => {
         setValue(secretValue(v));
-        setApiKey(v);
+        setConfig({ ...config, apiKey: v });
     };
 
     function secretValue(v: string) {
@@ -49,7 +50,7 @@ function FormApiKey(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel color="teal">当前秘钥</FormLabel>
+            <FormLabel color="teal">当前秘钥:</FormLabel>
             <Editable
                 style={{
                     textAlign: "left",
@@ -61,12 +62,21 @@ function FormApiKey(): JSX.Element {
                     setValue(v);
                 }}
                 onEdit={() => {
-                    setValue(apiKey);
+                    setValue(config.apiKey);
                 }}
             >
                 <EditablePreview style={{ color: "gray" }} />
                 <EditableInput style={{ fontSize: "0.9em" }} />
             </Editable>
+        </FormControl>
+    );
+}
+
+function FormContext(): JSX.Element {
+    return (
+        <FormControl>
+            <FormLabel color="teal">上下文:</FormLabel>
+            <Switch size="md" />
         </FormControl>
     );
 }
