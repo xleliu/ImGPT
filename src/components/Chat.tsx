@@ -91,7 +91,7 @@ export default function () {
                     temperature: reqParams.temperature,
                     // stream: true,
                 },
-                { timeout: 30000 }
+                { timeout: 60000 }
             );
             console.log(completion);
             m = completion.data.choices[0].message as ChatCompletionRequestMessage;
@@ -112,19 +112,21 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Box
-                style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
-                bg="gray.100"
-                borderWidth="1px"
-                borderRadius="lg"
-                padding="15px"
-            >
-                <Stack spacing="5">
-                    {messageStack?.map((v: MessageWithDate, i: number) => (
-                        <ChatItem key={i} message={v} />
-                    ))}
-                </Stack>
-                <div ref={messagesEndRef} />
+            <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 5px">
+                <Box
+                    style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
+                    // bg="gray.100"
+                    // borderWidth="1px"
+                    // borderRadius="lg"
+                    padding="15px"
+                >
+                    <Stack spacing="5">
+                        {messageStack?.map((v: MessageWithDate, i: number) => (
+                            <ChatItem key={i} message={v} />
+                        ))}
+                    </Stack>
+                    <div ref={messagesEndRef} />
+                </Box>
             </Box>
             <Stack spacing="3">
                 <Textarea
