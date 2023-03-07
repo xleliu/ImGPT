@@ -37,7 +37,8 @@ export function getSettings() {
         return defaultSetting;
     }
     try {
-        return JSON.parse(settings) as Settings;
+        const s = JSON.parse(settings) as Settings;
+        return s.config == undefined ? defaultSetting : s;
     } catch (_) {
         return defaultSetting;
     }
