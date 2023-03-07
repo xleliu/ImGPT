@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "macgpt",
+    "productName": "ImGPT",
     "version": "0.0.0"
   },
   "tauri": {
@@ -27,7 +27,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.scholer.macgpt",
+      "identifier": "com.scholer.imgpt",
       "targets": "all"
     },
     "security": {
@@ -40,7 +40,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "macgpt",
+        "title": "imgpt",
         "width": 800,
         "height": 680,
         "minWidth": 800,

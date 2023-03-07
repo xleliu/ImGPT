@@ -3,7 +3,7 @@ authors = ["you"]
 description = "A Tauri App"
 edition = "2021"
 license = ""
-name = "macgpt"
+name = "imgpt"
 repository = ""
 version = "0.0.1"
 

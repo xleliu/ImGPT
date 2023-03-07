@@ -13,7 +13,7 @@ import {
     ButtonGroup,
     Divider,
 } from "@chakra-ui/react";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi, ChatCompletionResponseMessage } from "openai";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { useState, useContext, useEffect, useRef } from "react";
 import { useMarkdown } from "../utils/useMarkdown";
 import { SettingContext } from "../utils/settingContext";
