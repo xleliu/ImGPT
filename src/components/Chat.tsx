@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { useState, useContext, useEffect, useRef } from "react";
-import { useMarkdown } from "../utils/useMarkdown";
+import { Markdown } from "../utils/markdown";
 import { SettingContext } from "../utils/settingContext";
 
 interface MessageWithDate extends ChatCompletionRequestMessage {
@@ -100,8 +100,12 @@ export default function () {
             setLoading(false);
             return;
         }
-        // await sleep(3000);
-        // m = { role: "system", content: "1234\n\n1234" };
+        await sleep(3000);
+        // m = {
+        //     role: "system",
+        //     content:
+        //         "\n\n以下是一个快速排序算法的`Go`实现：\n\n```go\nfunc quickSort(arr []int, left, right int) {\n    if left < right {\n        pivot := partition(arr, left, right)\n        quickSort(arr, left, pivot-1)\n        quickSort(arr, pivot+1, right)\n    }\n}\n\nfunc partition(arr []int, left, right int) int {\n    pivot := arr[right]\n    i := left - 1\n    for j := left; j < right; j++ {\n        if arr[j] < pivot {\n            i++\n            arr[i], arr[j] = arr[j], arr[i]\n        }\n    }\n    arr[i+1], arr[right] = arr[right], arr[i+1]\n    return i + 1\n}\n```\n\n这个算法使用了快速排序的思想，将数组分成两个部分，一部分小于基准值，一部分大于基准值。然后递归地对这两个部分进行排序。在这个实现中，基准值被选为数组的最后一个元素，然后使用双指针法将数组分成两个部分。",
+        // };
 
         messages.push(m);
         messageStack.push({ ...m, date: new Date().toLocaleString() });
@@ -202,7 +206,9 @@ function ChatItem(props: { message: MessageWithDate }) {
                         {message.role + " @ " + message.date + ":"}
                     </Text>
                 </StackItem>
-                <StackItem>{content.includes("```") ? useMarkdown(content) : content}</StackItem>
+                <StackItem>
+                    <Markdown source={content} />
+                </StackItem>
             </Stack>
             {message.resetContext ? <Divider borderColor="gray.500" borderStyle="dashed" /> : null}
         </>
