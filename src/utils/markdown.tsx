@@ -1,4 +1,3 @@
-import { Code } from "@chakra-ui/react";
 import ReactDOMServer from "react-dom/server";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -28,7 +27,19 @@ export const Markdown: React.FC<MarkdownProps> = ({ source }) => {
                 const el = <CodeBlock language={lang}>{code}</CodeBlock>;
                 return ReactDOMServer.renderToString(el);
             } else if (inlineCode) {
-                const el = <Code colorScheme="yellow">{inlineCode.slice(1, -1)}</Code>;
+                const el = (
+                    // 这里属于remote HTML content，无法直接只用 chakra 的组件了
+                    <code
+                        style={{
+                            backgroundColor: "#BEE3F8",
+                            padding: "0px 4px",
+                            margin: "0px 4px",
+                            borderRadius: "2px",
+                        }}
+                    >
+                        {inlineCode.slice(1, -1)}
+                    </code>
+                );
                 return ReactDOMServer.renderToString(el);
             } else {
                 return match;
