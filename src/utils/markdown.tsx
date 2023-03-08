@@ -28,7 +28,8 @@ export const Markdown: React.FC<MarkdownProps> = ({ source }) => {
                 return ReactDOMServer.renderToString(el);
             } else if (inlineCode) {
                 const el = (
-                    // 这里属于remote HTML content，无法直接只用 chakra 的组件了
+                    // 这里属于remote HTML content，无法直接使用 chakra 的组件
+                    // https://chakra-ui.com/community/recipes/prose
                     <code
                         style={{
                             backgroundColor: "#BEE3F8",
