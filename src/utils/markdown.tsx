@@ -33,7 +33,7 @@ export const Markdown: React.FC<MarkdownProps> = ({ source }) => {
                     <code
                         style={{
                             backgroundColor: "#BEE3F8",
-                            padding: "0px 4px",
+                            padding: "1px 4px",
                             margin: "0px 4px",
                             borderRadius: "2px",
                         }}
