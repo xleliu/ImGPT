@@ -129,7 +129,16 @@ export default function () {
                 >
                     <Stack spacing="5">
                         {messageStack?.map((v: MessageWithDate, i: number) => (
-                            <ChatItem key={i} message={v} />
+                            <ChatItem
+                                key={i}
+                                message={v}
+                                remove={() => {
+                                    messages.splice(i, 1);
+                                    setMessages([...messages]);
+                                    messageStack.splice(i, 1);
+                                    setMessageStack([...messageStack]);
+                                }}
+                            />
                         ))}
                     </Stack>
                     <div ref={messagesEndRef} />
@@ -194,7 +203,7 @@ export default function () {
     );
 }
 
-function ChatItem(props: { message: MessageWithDate }) {
+function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
     const message = props.message;
     const content = props.message.content.trim();
     const [flag, setFlag] = useBoolean();
@@ -231,13 +240,14 @@ function ChatItem(props: { message: MessageWithDate }) {
                                 aria-label={"view source"}
                                 onClick={setviewRaw.toggle}
                             />
-                            {/* <IconButton
+                            <IconButton
                                 size="xs"
                                 boxShadow="none"
                                 color="gray.400"
                                 icon={<MinusIcon />}
                                 aria-label={"remove item"}
-                            /> */}
+                                onClick={props.remove}
+                            />
                         </ButtonGroup>
                     </Flex>
                 </StackItem>
