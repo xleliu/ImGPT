@@ -15,7 +15,7 @@ import {
     IconButton,
     useBoolean,
 } from "@chakra-ui/react";
-import { ViewIcon, MinusIcon } from "@chakra-ui/icons";
+import { ViewIcon, ViewOffIcon, MinusIcon } from "@chakra-ui/icons";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { Markdown } from "../utils/markdown";
@@ -239,7 +239,7 @@ function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
                                 variant="ghost"
                                 colorScheme="yellow"
                                 borderWidth="0"
-                                icon={<ViewIcon />}
+                                icon={viewRaw ? <ViewOffIcon /> : <ViewIcon />}
                                 aria-label={"view source"}
                                 onClick={setviewRaw.toggle}
                             />

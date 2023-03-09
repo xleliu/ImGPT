@@ -1,6 +1,6 @@
-# WIP
+# ImGPT
 
-本地使用的 chatgpt
+I am GPT or Instant Message GPT, 本地使用的 chatgpt
 
 ## 使用方式
 
@@ -16,8 +16,10 @@
 
 1. Mac App 自签名的问题
 2. 输入框 shift+enter 换行
+3. 浮动角标似乎在 Mac 上有 bug，有时候无法显示，不确定是不是性能问题
 
 ## 后续计划：
 
-1. slash commands 预埋 prompt
-2. 对话框初始页面添加快捷操作
+1. 对话框内容导入导出
+2. slash commands 预埋 prompt
+3. 对话框初始页面添加快捷操作
