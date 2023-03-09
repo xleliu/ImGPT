@@ -12,9 +12,12 @@ import {
     Center,
     ButtonGroup,
     Divider,
+    IconButton,
+    useBoolean,
 } from "@chakra-ui/react";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
+import { ViewIcon, MinusIcon } from "@chakra-ui/icons";
 import { useState, useContext, useEffect, useRef } from "react";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { Markdown } from "../utils/markdown";
 import { SettingContext } from "../utils/settingContext";
 
@@ -160,6 +163,7 @@ export default function () {
                             onClick={() => {
                                 setMessages([]);
                                 setMessageStack([]);
+                                setLoading(false);
                             }}
                             w="100px"
                         >
@@ -174,6 +178,7 @@ export default function () {
                                     messageStack.at(-1)!.resetContext = true;
                                 }
                                 setMessages([]);
+                                setLoading(false);
                             }}
                             w="100px"
                         >
@@ -192,6 +197,9 @@ export default function () {
 function ChatItem(props: { message: MessageWithDate }) {
     const message = props.message;
     const content = props.message.content.trim();
+    const [flag, setFlag] = useBoolean();
+    const [viewRaw, setviewRaw] = useBoolean();
+
     return (
         <>
             <Stack
@@ -200,15 +208,40 @@ function ChatItem(props: { message: MessageWithDate }) {
                     whiteSpace: "pre-wrap",
                     fontSize: "0.9em",
                 }}
+                onMouseEnter={setFlag.on}
+                onMouseLeave={setFlag.off}
             >
                 <StackItem>
-                    <Text color={message.role == "user" ? "blue.600" : "green.600"}>
-                        {message.role + " @ " + message.date + ":"}
-                    </Text>
+                    <Flex>
+                        <Text color={message.role == "user" ? "blue.600" : "green.600"}>
+                            {message.role + " @ " + message.date + ":"}
+                        </Text>
+                        <Spacer />
+                        <ButtonGroup
+                            gap="0"
+                            style={{
+                                visibility: flag ? "visible" : "hidden",
+                            }}
+                        >
+                            <IconButton
+                                size="xs"
+                                boxShadow="none"
+                                color="gray.400"
+                                icon={<ViewIcon />}
+                                aria-label={"view source"}
+                                onClick={setviewRaw.toggle}
+                            />
+                            {/* <IconButton
+                                size="xs"
+                                boxShadow="none"
+                                color="gray.400"
+                                icon={<MinusIcon />}
+                                aria-label={"remove item"}
+                            /> */}
+                        </ButtonGroup>
+                    </Flex>
                 </StackItem>
-                <StackItem>
-                    <Markdown source={content} />
-                </StackItem>
+                <StackItem>{viewRaw ? <Text>{content}</Text> : <Markdown source={content} />}</StackItem>
             </Stack>
             {message.resetContext ? <Divider borderColor="gray.500" borderStyle="dashed" /> : null}
         </>
