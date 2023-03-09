@@ -12,7 +12,6 @@ import {
     EditableInput,
     Grid,
     GridItem,
-    Switch,
 } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { SettingContext } from "../utils/settingContext";
@@ -68,15 +67,6 @@ function FormApiKey(): JSX.Element {
                 <EditablePreview style={{ color: "gray" }} />
                 <EditableInput style={{ fontSize: "0.9em" }} />
             </Editable>
-        </FormControl>
-    );
-}
-
-function FormContext(): JSX.Element {
-    return (
-        <FormControl>
-            <FormLabel color="teal">上下文:</FormLabel>
-            <Switch size="md" />
         </FormControl>
     );
 }

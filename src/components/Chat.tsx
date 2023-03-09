@@ -39,6 +39,11 @@ export default function () {
         const configuration = new Configuration({ apiKey: config.apiKey });
         openai = new OpenAIApi(configuration);
     };
+    setupOpenAI();
+    useEffect(() => {
+        setupOpenAI();
+    }, [config.apiKey]);
+
     // 用于向接口提交
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     // 用于展示
@@ -51,23 +56,17 @@ export default function () {
         }, 100);
     }, [messages, messageStack]);
 
-    setupOpenAI();
-    useEffect(() => {
-        setupOpenAI();
-    }, [config.apiKey]);
-
-    useEffect(() => {
-        window.addEventListener("keypress", handleKeyEnter);
-        return () => {
-            window.removeEventListener("keypress", handleKeyEnter);
-        };
-    }, [handleKeyEnter]);
-
-    function handleKeyEnter(e: { key: string }) {
-        if (e.key === "Enter") {
+    const handleKeyEnter = (e: { shiftKey: boolean; keyCode: number }) => {
+        if (e.keyCode == 13 && !e.shiftKey) {
             handleClick();
         }
-    }
+    };
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyEnter);
+        return () => {
+            window.removeEventListener("keydown", handleKeyEnter);
+        };
+    }, [handleKeyEnter]);
 
     async function handleClick() {
         if (prompt == "") {
