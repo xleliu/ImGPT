@@ -118,14 +118,8 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 5px">
-                <Box
-                    style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
-                    // bg="gray.100"
-                    // borderWidth="1px"
-                    // borderRadius="lg"
-                    padding="15px"
-                >
+            <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 4px">
+                <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }} padding="16px">
                     <Stack spacing="5">
                         {messageStack?.map((v: MessageWithDate, i: number) => (
                             <ChatItem
