@@ -18,12 +18,15 @@ import { SettingContext } from "../utils/settingContext";
 
 export default function () {
     return (
-        <Grid templateColumns="repeat(4, 1fr)" gap={10} height="80px">
+        <Grid templateColumns="repeat(5, 1fr)" gap={10} height="80px">
             <GridItem colSpan={3}>
                 <FormApiKey />
             </GridItem>
             <GridItem colSpan={1}>
                 <FormTemperature />
+            </GridItem>
+            <GridItem colSpan={1}>
+                <FormFontSize />
             </GridItem>
         </Grid>
     );
@@ -78,7 +81,7 @@ function FormTemperature(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel color="teal">Temperature:</FormLabel>
+            <FormLabel color="teal">抽样温度:</FormLabel>
             <Slider
                 id="slider"
                 defaultValue={temperature}
@@ -105,6 +108,48 @@ function FormTemperature(): JSX.Element {
                     placement="top"
                     isOpen={showTooltip}
                     label={temperature / 10}
+                >
+                    <SliderThumb />
+                </Tooltip>
+            </Slider>
+        </FormControl>
+    );
+}
+
+function FormFontSize(): JSX.Element {
+    const { config, setConfig } = useContext(SettingContext);
+    const [fontsize, setFontsize] = useState(config.fontsize * 10);
+    const [showTooltip, setShowTooltip] = useState(false);
+
+    return (
+        <FormControl>
+            <FormLabel color="teal">字体大小:</FormLabel>
+            <Slider
+                id="slider"
+                defaultValue={fontsize}
+                min={8}
+                max={12}
+                colorScheme="teal"
+                onChange={(v) => {
+                    setFontsize(v);
+                    setConfig({ ...config, fontsize: v / 10 });
+                }}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+            >
+                <SliderMark value={10} mt="1" ml="-1" fontSize="sm">
+                    1
+                </SliderMark>
+                <SliderTrack>
+                    <SliderFilledTrack />
+                </SliderTrack>
+                <Tooltip
+                    hasArrow
+                    bg="teal.500"
+                    color="white"
+                    placement="top"
+                    isOpen={showTooltip}
+                    label={fontsize / 10}
                 >
                     <SliderThumb />
                 </Tooltip>

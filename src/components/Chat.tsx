@@ -139,7 +139,7 @@ export default function () {
             </Box>
             <Stack spacing="3">
                 <Textarea
-                    style={{ fontSize: "0.9em" }}
+                    style={{ fontSize: `${config.fontsize}em` }}
                     placeholder="输入您的问题……"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value.trimStart())}
@@ -197,6 +197,8 @@ export default function () {
 }
 
 function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
+    const { config } = useContext(SettingContext);
+
     const message = props.message;
     const content = props.message.content.trim();
     const [flag, setFlag] = useBoolean();
@@ -208,7 +210,7 @@ function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
                 style={{
                     textAlign: "left",
                     whiteSpace: "pre-wrap",
-                    fontSize: "0.9em",
+                    fontSize: `${config.fontsize}em`,
                 }}
                 onMouseEnter={setFlag.on}
                 onMouseLeave={setFlag.off}
