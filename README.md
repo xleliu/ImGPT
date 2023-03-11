@@ -16,6 +16,7 @@ I am GPT or Instant Message GPT, 本地使用的 chatgpt
 
 1. Mac App 自签名的问题
 2. 浮动角标似乎在 Mac 上有 bug，有时候无法显示，不确定是不是性能问题
+3. 首次填入 key 之后需要双击才会变成 view 状态，似乎不影响使用
 
 ## 后续计划：
 

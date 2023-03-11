@@ -20,6 +20,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { Markdown } from "../utils/markdown";
 import { SettingContext } from "../utils/settingContext";
+import Sidebar from "./Sidebar";
 
 interface MessageWithDate extends ChatCompletionRequestMessage {
     date: string;
@@ -119,7 +120,7 @@ export default function () {
     return (
         <Stack spacing={4}>
             <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 4px">
-                <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }} padding="16px">
+                <Box style={{ height: "calc(100vh - 280px)", overflowY: "auto" }} padding="16px">
                     <Stack spacing="5">
                         {messageStack?.map((v: MessageWithDate, i: number) => (
                             <ChatItem
@@ -146,9 +147,11 @@ export default function () {
                     resize="none"
                 />
                 <Flex>
+                    <Sidebar />
                     <Center
                         style={{
                             visibility: loading ? "visible" : "hidden",
+                            marginLeft: "15px",
                         }}
                     >
                         <CircularProgress isIndeterminate color="gray.400" size="4" style={{ marginRight: "5px" }} />
