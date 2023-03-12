@@ -38,7 +38,7 @@ export default function Dialog(props: {
     }, [messages, messageStack]);
 
     return (
-        <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 4px">
+        <Box borderWidth="1px" borderRadius="lg" padding="0px 4px" bg="gray.100" _dark={{ bg: "whiteAlpha.100" }}>
             <Box style={{ height: "calc(100vh - 280px)", overflowY: "auto" }} padding="16px">
                 <Stack spacing="5">
                     {messageStack?.map((v: MessageWithDate, i: number) => (

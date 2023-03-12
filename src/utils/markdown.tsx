@@ -1,6 +1,6 @@
 import ReactDOMServer from "react-dom/server";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coldarkCold } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface CodeBlockProps {
     language: string;
@@ -13,7 +13,7 @@ interface MarkdownProps {
 
 export const CodeBlock: React.FC<CodeBlockProps> = ({ language, children }) => {
     return (
-        <SyntaxHighlighter language={language} style={solarizedlight}>
+        <SyntaxHighlighter language={language} style={coldarkCold}>
             {children}
         </SyntaxHighlighter>
     );
@@ -32,7 +32,8 @@ export const Markdown: React.FC<MarkdownProps> = ({ source }) => {
                     // https://chakra-ui.com/community/recipes/prose
                     <code
                         style={{
-                            backgroundColor: "#BEE3F8",
+                            backgroundColor: "#A0AEC0",
+                            // fontWeight: "bold",
                             padding: "1px 4px",
                             margin: "0px 4px",
                             borderRadius: "2px",

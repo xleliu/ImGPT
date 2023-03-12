@@ -34,6 +34,7 @@ export default function Sidebar() {
             <IconButton
                 size="md"
                 variant="ghost"
+                borderWidth="0"
                 onClick={onOpen}
                 icon={<HamburgerIcon />}
                 aria-label={"view slider"}
