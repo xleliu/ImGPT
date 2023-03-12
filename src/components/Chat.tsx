@@ -134,7 +134,6 @@ export default function () {
                     <Spacer />
                     <ButtonGroup gap="3">
                         <Button
-                            colorScheme="teal"
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -147,7 +146,6 @@ export default function () {
                             清屏
                         </Button>
                         <Button
-                            colorScheme="teal"
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -161,7 +159,7 @@ export default function () {
                         >
                             重置
                         </Button>
-                        <Button colorScheme="teal" size="md" onClick={handleClick} w="100px">
+                        <Button size="md" onClick={handleClick} w="100px">
                             发送
                         </Button>
                     </ButtonGroup>

@@ -83,7 +83,7 @@ function FormApiKey(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel color="teal">当前秘钥:</FormLabel>
+            <FormLabel>当前秘钥:</FormLabel>
             <Editable
                 style={{
                     textAlign: "left",
@@ -112,13 +112,12 @@ function FormTemperature(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel color="teal">抽样温度:</FormLabel>
+            <FormLabel>抽样温度:</FormLabel>
             <Slider
                 id="slider"
                 defaultValue={temperature}
                 min={0}
                 max={20}
-                colorScheme="teal"
                 onChange={(v) => {
                     setTemperature(v);
                     setReqParams({ ...reqParams, temperature: v / 10 });
@@ -132,14 +131,7 @@ function FormTemperature(): JSX.Element {
                 <SliderTrack>
                     <SliderFilledTrack />
                 </SliderTrack>
-                <Tooltip
-                    hasArrow
-                    bg="teal.500"
-                    color="white"
-                    placement="top"
-                    isOpen={showTooltip}
-                    label={temperature / 10}
-                >
+                <Tooltip hasArrow color="white" placement="top" isOpen={showTooltip} label={temperature / 10}>
                     <SliderThumb />
                 </Tooltip>
             </Slider>
@@ -154,13 +146,12 @@ function FormFontSize(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel color="teal">字体大小:</FormLabel>
+            <FormLabel>字体大小:</FormLabel>
             <Slider
                 id="slider"
                 defaultValue={fontsize}
                 min={8}
                 max={12}
-                colorScheme="teal"
                 onChange={(v) => {
                     setFontsize(v);
                     setConfig({ ...config, fontsize: v / 10 });
@@ -174,14 +165,7 @@ function FormFontSize(): JSX.Element {
                 <SliderTrack>
                     <SliderFilledTrack />
                 </SliderTrack>
-                <Tooltip
-                    hasArrow
-                    bg="teal.500"
-                    color="white"
-                    placement="top"
-                    isOpen={showTooltip}
-                    label={fontsize / 10}
-                >
+                <Tooltip hasArrow color="white" placement="top" isOpen={showTooltip} label={fontsize / 10}>
                     <SliderThumb />
                 </Tooltip>
             </Slider>
