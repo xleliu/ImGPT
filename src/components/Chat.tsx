@@ -9,8 +9,12 @@ import {
     CircularProgress,
     Center,
     ButtonGroup,
+    Menu,
+    MenuList,
+    MenuItem,
+    MenuButton,
 } from "@chakra-ui/react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { SettingContext } from "../utils/settingContext";
 import Sidebar from "./Sidebar";
@@ -41,18 +45,6 @@ export default function () {
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     // 用于展示
     const [messageStack, setMessageStack] = useState<MessageWithDate[]>([]);
-
-    const handleKeyEnter = (e: { shiftKey: boolean; keyCode: number }) => {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            handleClick();
-        }
-    };
-    useEffect(() => {
-        window.addEventListener("keydown", handleKeyEnter);
-        return () => {
-            window.removeEventListener("keydown", handleKeyEnter);
-        };
-    }, [handleKeyEnter]);
 
     async function handleClick() {
         if (prompt == "") {
@@ -88,7 +80,7 @@ export default function () {
             setLoading(false);
             return;
         }
-        // await sleep(2000);
+        // await sleep(1000);
         // m = {
         //     role: "system",
         //     content:
@@ -112,12 +104,18 @@ export default function () {
             />
             <Stack spacing="3">
                 <Textarea
+                    resize="none"
                     style={{ fontSize: `${config.fontsize}em` }}
                     placeholder="输入您的问题……"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value.trimStart())}
-                    resize="none"
+                    onKeyDown={(e: { shiftKey: boolean; keyCode: number }) => {
+                        if (e.keyCode == 13 && !e.shiftKey) {
+                            handleClick();
+                        }
+                    }}
                 />
+                {/* <TextField prompt={prompt} setPrompt={setPrompt} handleClick={handleClick} /> */}
                 <Flex>
                     <Sidebar />
                     <Center
@@ -166,6 +164,74 @@ export default function () {
                 </Flex>
             </Stack>
         </Stack>
+    );
+}
+
+function TextField(props: { prompt: string; setPrompt: (s: string) => void; handleClick: () => void }) {
+    const { config } = useContext(SettingContext);
+    const { prompt, setPrompt, handleClick } = props;
+    const btnRef = useRef<HTMLButtonElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    return (
+        <>
+            <Menu>
+                <MenuButton
+                    ref={btnRef}
+                    visibility="hidden"
+                    style={{
+                        height: "0px",
+                        marginTop: "-14px",
+                    }}
+                >
+                    Slash Commands
+                </MenuButton>
+                <SlashCommands setPrompt={setPrompt} inputRef={inputRef} />
+            </Menu>
+
+            <Textarea
+                resize="none"
+                style={{ fontSize: `${config.fontsize}em` }}
+                placeholder="输入您的问题……"
+                ref={inputRef}
+                value={prompt}
+                onChange={(e) => {
+                    const v = e.target.value.trimStart();
+                    setPrompt(v);
+                    if (v === "/") {
+                        btnRef.current!.click();
+                    }
+                }}
+                onKeyDown={(e: { shiftKey: boolean; keyCode: number }) => {
+                    if (e.keyCode == 13 && !e.shiftKey) {
+                        handleClick();
+                    }
+                }}
+            />
+        </>
+    );
+}
+
+function SlashCommands(props: { setPrompt: (s: string) => void; inputRef: React.RefObject<HTMLTextAreaElement> }) {
+    const { setPrompt, inputRef } = props;
+
+    const commands = ["翻译成英文", "翻译成中文", "查询 Github 仓库", "历史上的今天", "查询菜谱"];
+    return (
+        <MenuList>
+            {commands.map((cmd: string, i: number) => (
+                <MenuItem
+                    key={i}
+                    borderRadius="0"
+                    boxShadow="none"
+                    onClick={() => {
+                        setPrompt(cmd + ": ");
+                        inputRef.current!.focus();
+                    }}
+                >
+                    {cmd}
+                </MenuItem>
+            ))}
+        </MenuList>
     );
 }
 

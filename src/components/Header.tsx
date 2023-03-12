@@ -1,5 +1,5 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Center, Flex, Heading, IconButton, Spacer, useColorMode } from "@chakra-ui/react";
+import { Flex, Heading, IconButton, Spacer, useColorMode, Link, HStack } from "@chakra-ui/react";
+import { MoonIcon, SunIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 
 export default function () {
     const { colorMode, toggleColorMode } = useColorMode();
@@ -9,16 +9,20 @@ export default function () {
                 ImGPT
             </Heading>
             <Spacer />
-            <Center>
+            <HStack spacing="2">
                 <IconButton
                     size="md"
                     variant="ghost"
                     borderWidth="0"
+                    boxShadow="none"
                     icon={colorMode == "dark" ? <SunIcon /> : <MoonIcon />}
                     aria-label={"change color mode"}
                     onClick={toggleColorMode}
                 />
-            </Center>
+                <Link href="https://github.com/xiaoler/ImGPT" isExternal>
+                    Contribute <ExternalLinkIcon mx="2px" />
+                </Link>
+            </HStack>
         </Flex>
     );
 }

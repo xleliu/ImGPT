@@ -66,7 +66,7 @@ function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
     const message = props.message;
     const content = props.message.content.trim();
     const [flag, setFlag] = useBoolean();
-    const [viewRaw, setviewRaw] = useBoolean();
+    const [viewRaw, setViewRaw] = useBoolean();
 
     return (
         <>
@@ -100,7 +100,7 @@ function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
                                 borderWidth="0"
                                 icon={viewRaw ? <ViewOffIcon /> : <ViewIcon />}
                                 aria-label={"view source"}
-                                onClick={setviewRaw.toggle}
+                                onClick={setViewRaw.toggle}
                             />
                             <IconButton
                                 size="xs"
