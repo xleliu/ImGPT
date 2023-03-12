@@ -5,21 +5,16 @@ import {
     Spacer,
     Button,
     useToast,
-    StackItem,
-    Box,
     Text,
     CircularProgress,
     Center,
     ButtonGroup,
-    Divider,
-    IconButton,
-    useBoolean,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon, MinusIcon } from "@chakra-ui/icons";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
-import { Markdown } from "../utils/markdown";
 import { SettingContext } from "../utils/settingContext";
+import Sidebar from "./Sidebar";
+import Dialog from "./Dialog";
 
 interface MessageWithDate extends ChatCompletionRequestMessage {
     date: string;
@@ -31,8 +26,6 @@ export default function () {
     const { config, reqParams } = useContext(SettingContext);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
-
-    const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -48,13 +41,6 @@ export default function () {
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     // 用于展示
     const [messageStack, setMessageStack] = useState<MessageWithDate[]>([]);
-
-    useEffect(() => {
-        // onChange events seem to block certain transitions
-        setTimeout(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-    }, [messages, messageStack]);
 
     const handleKeyEnter = (e: { shiftKey: boolean; keyCode: number }) => {
         if (e.keyCode == 13 && !e.shiftKey) {
@@ -102,7 +88,7 @@ export default function () {
             setLoading(false);
             return;
         }
-        // await sleep(3000);
+        // await sleep(2000);
         // m = {
         //     role: "system",
         //     content:
@@ -118,25 +104,12 @@ export default function () {
 
     return (
         <Stack spacing={4}>
-            <Box bg="gray.100" borderWidth="1px" borderRadius="lg" padding="0px 4px">
-                <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }} padding="16px">
-                    <Stack spacing="5">
-                        {messageStack?.map((v: MessageWithDate, i: number) => (
-                            <ChatItem
-                                key={i}
-                                message={v}
-                                remove={() => {
-                                    messages.splice(i, 1);
-                                    setMessages([...messages]);
-                                    messageStack.splice(i, 1);
-                                    setMessageStack([...messageStack]);
-                                }}
-                            />
-                        ))}
-                    </Stack>
-                    <div ref={messagesEndRef} />
-                </Box>
-            </Box>
+            <Dialog
+                messages={messages}
+                setMessages={setMessages}
+                messageStack={messageStack}
+                setMessageStack={setMessageStack}
+            />
             <Stack spacing="3">
                 <Textarea
                     style={{ fontSize: `${config.fontsize}em` }}
@@ -146,9 +119,11 @@ export default function () {
                     resize="none"
                 />
                 <Flex>
+                    <Sidebar />
                     <Center
                         style={{
                             visibility: loading ? "visible" : "hidden",
+                            marginLeft: "15px",
                         }}
                     >
                         <CircularProgress isIndeterminate color="gray.400" size="4" style={{ marginRight: "5px" }} />
@@ -159,7 +134,6 @@ export default function () {
                     <Spacer />
                     <ButtonGroup gap="3">
                         <Button
-                            colorScheme="teal"
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -172,7 +146,6 @@ export default function () {
                             清屏
                         </Button>
                         <Button
-                            colorScheme="teal"
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -186,76 +159,13 @@ export default function () {
                         >
                             重置
                         </Button>
-                        <Button colorScheme="teal" size="md" onClick={handleClick} w="100px">
+                        <Button size="md" onClick={handleClick} w="100px">
                             发送
                         </Button>
                     </ButtonGroup>
                 </Flex>
             </Stack>
         </Stack>
-    );
-}
-
-function ChatItem(props: { message: MessageWithDate; remove: () => void }) {
-    const { config } = useContext(SettingContext);
-
-    const message = props.message;
-    const content = props.message.content.trim();
-    const [flag, setFlag] = useBoolean();
-    const [viewRaw, setviewRaw] = useBoolean();
-
-    return (
-        <>
-            <Stack
-                style={{
-                    textAlign: "left",
-                    whiteSpace: "pre-wrap",
-                    fontSize: `${config.fontsize}em`,
-                }}
-                onMouseEnter={setFlag.on}
-                onMouseLeave={setFlag.off}
-            >
-                <StackItem>
-                    <Flex>
-                        <Text color={message.role == "user" ? "blue.600" : "green.600"}>
-                            {message.role + " @ " + message.date + ":"}
-                        </Text>
-                        <Spacer />
-                        <ButtonGroup
-                            gap="0"
-                            style={{
-                                visibility: flag ? "visible" : "hidden",
-                            }}
-                        >
-                            <IconButton
-                                size="xs"
-                                boxShadow="none"
-                                color="gray.400"
-                                variant="ghost"
-                                colorScheme="yellow"
-                                borderWidth="0"
-                                icon={viewRaw ? <ViewOffIcon /> : <ViewIcon />}
-                                aria-label={"view source"}
-                                onClick={setviewRaw.toggle}
-                            />
-                            <IconButton
-                                size="xs"
-                                boxShadow="none"
-                                color="gray.400"
-                                variant="ghost"
-                                colorScheme="yellow"
-                                borderWidth="0"
-                                icon={<MinusIcon />}
-                                aria-label={"remove item"}
-                                onClick={props.remove}
-                            />
-                        </ButtonGroup>
-                    </Flex>
-                </StackItem>
-                <StackItem>{viewRaw ? <Text>{content}</Text> : <Markdown source={content} />}</StackItem>
-            </Stack>
-            {message.resetContext ? <Divider borderColor="gray.500" borderStyle="dashed" /> : null}
-        </>
     );
 }
 
