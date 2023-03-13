@@ -5,14 +5,12 @@ import {
     Spacer,
     Button,
     useToast,
-    Text,
-    CircularProgress,
-    Center,
     ButtonGroup,
     Menu,
     MenuList,
     MenuItem,
     MenuButton,
+    Progress,
     useMediaQuery,
 } from "@chakra-ui/react";
 import { useState, useContext, useEffect, useRef } from "react";
@@ -33,7 +31,7 @@ export default function () {
     const [loading, setLoading] = useState(false);
 
     // 移动端
-    const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+    const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -106,6 +104,7 @@ export default function () {
                 messageStack={messageStack}
                 setMessageStack={setMessageStack}
             />
+            <Progress size="xs" isIndeterminate={loading} borderRadius="full" />
             <Stack spacing="3">
                 {!config.prePrompt ? (
                     <Textarea
@@ -125,21 +124,10 @@ export default function () {
                 )}
                 <Flex>
                     <Sidebar />
-                    <Center
-                        style={{
-                            visibility: loading ? "visible" : "hidden",
-                            marginLeft: "15px",
-                        }}
-                    >
-                        <CircularProgress isIndeterminate color="gray.400" size="4" style={{ marginRight: "5px" }} />
-                        <Text color="gray.500" fontSize="sm">
-                            正在获取答案……
-                        </Text>
-                    </Center>
                     <Spacer />
                     <ButtonGroup gap="3">
                         <Button
-                            display={isLargerThan600 ? "" : "none"}
+                            display={isLargerThan480 ? "" : "none"}
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -152,7 +140,6 @@ export default function () {
                             清屏
                         </Button>
                         <Button
-                            display={isLargerThan600 ? "" : "none"}
                             variant="outline"
                             size="md"
                             onClick={() => {
