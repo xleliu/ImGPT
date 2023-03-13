@@ -103,19 +103,22 @@ export default function () {
                 setMessageStack={setMessageStack}
             />
             <Stack spacing="3">
-                <Textarea
-                    resize="none"
-                    style={{ fontSize: `${config.fontsize}em` }}
-                    placeholder="输入您的问题……"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value.trimStart())}
-                    onKeyDown={(e: { shiftKey: boolean; keyCode: number }) => {
-                        if (e.keyCode == 13 && !e.shiftKey) {
-                            handleClick();
-                        }
-                    }}
-                />
-                {/* <TextField prompt={prompt} setPrompt={setPrompt} handleClick={handleClick} /> */}
+                {!config.prePrompt ? (
+                    <Textarea
+                        resize="none"
+                        style={{ fontSize: `${config.fontsize}em` }}
+                        placeholder="输入您的问题……"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value.trimStart())}
+                        onKeyDown={(e: { shiftKey: boolean; keyCode: number }) => {
+                            if (e.keyCode == 13 && !e.shiftKey) {
+                                handleClick();
+                            }
+                        }}
+                    />
+                ) : (
+                    <TextField prompt={prompt} setPrompt={setPrompt} handleClick={handleClick} />
+                )}
                 <Flex>
                     <Sidebar />
                     <Center
