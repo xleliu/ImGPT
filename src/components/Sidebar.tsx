@@ -20,6 +20,7 @@ import {
     Stack,
     Switch,
     VisuallyHiddenInput,
+    Divider,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useState, useContext, useRef } from "react";
@@ -54,6 +55,7 @@ export default function Sidebar() {
                             <FormApiKey />
                             <FormTemperature />
                             <FormFontSize />
+                            <Divider />
                             <FormPrePrompt />
                             // 防止自动绑定focus
                             <VisuallyHiddenInput ref={dummyRef} />
