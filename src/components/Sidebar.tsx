@@ -18,6 +18,7 @@ import {
     EditablePreview,
     EditableInput,
     Stack,
+    Switch,
     VisuallyHiddenInput,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -53,6 +54,7 @@ export default function Sidebar() {
                             <FormApiKey />
                             <FormTemperature />
                             <FormFontSize />
+                            <FormPrePrompt />
                             // 防止自动绑定focus
                             <VisuallyHiddenInput ref={dummyRef} />
                         </Stack>
@@ -169,6 +171,20 @@ function FormFontSize(): JSX.Element {
                     <SliderThumb />
                 </Tooltip>
             </Slider>
+        </FormControl>
+    );
+}
+
+function FormPrePrompt(): JSX.Element {
+    const { config, setConfig } = useContext(SettingContext);
+    return (
+        <FormControl display="flex" alignItems="center">
+            <FormLabel>Slash 命令（实验性）:</FormLabel>
+            <Switch
+                size="md"
+                isChecked={config.prePrompt}
+                onChange={() => setConfig({ ...config, prePrompt: !config.prePrompt })}
+            />
         </FormControl>
     );
 }
