@@ -32,8 +32,8 @@ export const Markdown: React.FC<MarkdownProps> = ({ source }) => {
                     // https://chakra-ui.com/community/recipes/prose
                     <code
                         style={{
+                            color: "#1A202C",
                             backgroundColor: "#A0AEC0",
-                            // fontWeight: "bold",
                             padding: "1px 4px",
                             margin: "0px 4px",
                             borderRadius: "2px",
