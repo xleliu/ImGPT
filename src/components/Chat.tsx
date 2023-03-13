@@ -13,6 +13,7 @@ import {
     MenuList,
     MenuItem,
     MenuButton,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
@@ -30,6 +31,9 @@ export default function () {
     const { config, reqParams } = useContext(SettingContext);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // 移动端
+    const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -135,6 +139,7 @@ export default function () {
                     <Spacer />
                     <ButtonGroup gap="3">
                         <Button
+                            display={isLargerThan600 ? "" : "none"}
                             variant="outline"
                             size="md"
                             onClick={() => {
@@ -147,6 +152,7 @@ export default function () {
                             清屏
                         </Button>
                         <Button
+                            display={isLargerThan600 ? "" : "none"}
                             variant="outline"
                             size="md"
                             onClick={() => {
