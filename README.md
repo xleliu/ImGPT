@@ -23,3 +23,10 @@ I am GPT or Instant Message GPT, 本地使用的 chatgpt
 1. slash commands 预埋 prompt（简易版已实现）
 2. 对话框内容导入导出
 3. 对话框初始页面添加快捷操作
+
+## 交流：
+
+-   电报群: [https://t.me/+YkEGeRxB5Q0zODY1](https://t.me/+YkEGeRxB5Q0zODY1)
+
+-   微信群：
+    ![微信群](./docs/wechat.jpg)
