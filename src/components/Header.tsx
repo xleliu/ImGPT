@@ -20,7 +20,7 @@ export default function () {
                     onClick={toggleColorMode}
                 />
                 <Link href="https://github.com/xiaoler/ImGPT" isExternal>
-                    Contribute <ExternalLinkIcon mx="2px" />
+                    Github <ExternalLinkIcon mx="2px" />
                 </Link>
             </HStack>
         </Flex>
