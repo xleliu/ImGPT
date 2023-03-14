@@ -50,7 +50,12 @@ export default function () {
     const reseted = current?.messages.map((item) => item.resetContext).lastIndexOf(true);
     // 用于向接口提交
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>(
-        current?.messages.slice(reseted + 1) ?? []
+        (current?.messages.slice(reseted + 1) ?? []).map((item) => {
+            return {
+                role: item.role,
+                content: item.content,
+            };
+        })
     );
     // 用于展示
     const [messageStack, setMessageStack] = useState<MessageWithDate[]>(current?.messages ?? []);
@@ -167,6 +172,7 @@ export default function () {
                             onClick={() => {
                                 if (messages.length > 0) {
                                     messageStack.at(-1)!.resetContext = true;
+                                    setMessageStack([...messageStack]);
                                 }
                                 setMessages([]);
                                 setLoading(false);

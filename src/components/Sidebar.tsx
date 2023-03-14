@@ -187,7 +187,6 @@ function FormSaveSession(): JSX.Element {
             <Switch
                 size="md"
                 isChecked={config.saveSession}
-                isDisabled // 暂时禁用，有bug
                 onChange={() => {
                     if (config.saveSession) {
                         updateSession([]);
