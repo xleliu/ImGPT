@@ -8,6 +8,14 @@ I am GPT or Instant Message GPT, 本地使用的 chatgpt
 2. 从 [openai](https://platform.openai.com/account/api-keys) 获取一个 apikey，填入
 3. 填入秘钥开始对话
 
+## 功能
+
+1. 重置、清空会话
+2. Markdown 代码块解析
+3. temperature 设置
+4. dark mode
+5. 可以选择开启保存会话
+
 ## 代理问题
 
 域名已经被屏蔽，需要代理；开发环境下如果无法透过代理请求，检查你的代理设置里是不是跳过了 127.0.0.1、localhost。

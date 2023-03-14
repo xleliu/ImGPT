@@ -15,11 +15,7 @@ import { ChatCompletionRequestMessage } from "openai";
 import { useContext, useEffect, useRef } from "react";
 import { Markdown } from "../utils/markdown";
 import { SettingContext } from "../utils/settingContext";
-
-interface MessageWithDate extends ChatCompletionRequestMessage {
-    date: string;
-    resetContext?: boolean;
-}
+import { MessageWithDate } from "../utils/messageStore";
 
 export default function Dialog(props: {
     messages: ChatCompletionRequestMessage[];

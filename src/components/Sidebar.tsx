@@ -25,6 +25,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useState, useContext, useRef } from "react";
 import { SettingContext } from "../utils/settingContext";
+import { updateSession } from "../utils/messageStore";
 
 export default function Sidebar() {
     const { config } = useContext(SettingContext);
@@ -56,6 +57,7 @@ export default function Sidebar() {
                             <FormTemperature />
                             <FormFontSize />
                             <Divider />
+                            <FormSaveSession />
                             <FormPrePrompt />
                             // 防止自动绑定focus
                             <VisuallyHiddenInput ref={dummyRef} />
@@ -87,7 +89,7 @@ function FormApiKey(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel>当前秘钥:</FormLabel>
+            <FormLabel>当前秘钥</FormLabel>
             <Editable
                 style={{
                     textAlign: "left",
@@ -116,7 +118,7 @@ function FormTemperature(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel>抽样温度:</FormLabel>
+            <FormLabel>抽样温度</FormLabel>
             <Slider
                 id="slider"
                 defaultValue={temperature}
@@ -150,7 +152,7 @@ function FormFontSize(): JSX.Element {
 
     return (
         <FormControl>
-            <FormLabel>字体大小:</FormLabel>
+            <FormLabel>字体大小</FormLabel>
             <Slider
                 id="slider"
                 defaultValue={fontsize}
@@ -177,11 +179,30 @@ function FormFontSize(): JSX.Element {
     );
 }
 
+function FormSaveSession(): JSX.Element {
+    const { config, setConfig } = useContext(SettingContext);
+    return (
+        <FormControl>
+            <FormLabel>保存历史会话</FormLabel>
+            <Switch
+                size="md"
+                isChecked={config.saveSession}
+                onChange={() => {
+                    if (config.saveSession) {
+                        updateSession([]);
+                    }
+                    setConfig({ ...config, saveSession: !config.saveSession });
+                }}
+            />
+        </FormControl>
+    );
+}
+
 function FormPrePrompt(): JSX.Element {
     const { config, setConfig } = useContext(SettingContext);
     return (
-        <FormControl display="flex" alignItems="center">
-            <FormLabel>Slash 命令（实验性）:</FormLabel>
+        <FormControl>
+            <FormLabel>Slash 命令（实验性）</FormLabel>
             <Switch
                 size="md"
                 isChecked={config.prePrompt}

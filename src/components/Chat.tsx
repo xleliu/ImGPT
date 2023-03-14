@@ -11,18 +11,16 @@ import {
     MenuItem,
     MenuButton,
     Progress,
+    HStack,
     useMediaQuery,
 } from "@chakra-ui/react";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { SettingContext } from "../utils/settingContext";
+import { MessageWithDate, updateSession, loadSession } from "../utils/messageStore";
 import Sidebar from "./Sidebar";
 import Dialog from "./Dialog";
-
-interface MessageWithDate extends ChatCompletionRequestMessage {
-    date: string;
-    resetContext?: boolean;
-}
+// import Session from "./Session";
 
 export default function () {
     const toast = useToast();
@@ -43,10 +41,31 @@ export default function () {
         setupOpenAI();
     }, [config.apiKey]);
 
+    // 获取保存的会话顺序
+    const sessions = loadSession();
+    // 当前选中的会话id
+    const [index, setIndex] = useState(0);
+    const current = sessions[index];
+    // 最后一次重置的id
+    const reseted = current?.messages.map((item) => item.resetContext).lastIndexOf(true);
     // 用于向接口提交
-    const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+    const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>(
+        current?.messages.slice(reseted + 1) ?? []
+    );
     // 用于展示
-    const [messageStack, setMessageStack] = useState<MessageWithDate[]>([]);
+    const [messageStack, setMessageStack] = useState<MessageWithDate[]>(current?.messages ?? []);
+
+    useEffect(() => {
+        if (!config.saveSession) {
+            return;
+        }
+        let name = current?.name;
+        if (!name) {
+            name = messageStack[0]?.content.substring(0, 5) ?? "";
+        }
+        sessions[index] = { name: name, messages: messageStack };
+        updateSession(sessions);
+    }, [config.saveSession, messageStack]);
 
     async function handleClick() {
         if (prompt == "") {
@@ -123,7 +142,10 @@ export default function () {
                     <TextField prompt={prompt} setPrompt={setPrompt} handleClick={handleClick} />
                 )}
                 <Flex>
-                    <Sidebar />
+                    <HStack spacing="2">
+                        <Sidebar />
+                        {/* {config.saveSession ? <Session /> : null} */}
+                    </HStack>
                     <Spacer />
                     <ButtonGroup gap="3">
                         <Button

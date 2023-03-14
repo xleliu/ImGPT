@@ -8,6 +8,7 @@ export interface Config {
     apiKey: string;
     fontsize: number;
     prePrompt: boolean;
+    saveSession: boolean;
 }
 
 export interface Settings {
@@ -29,10 +30,15 @@ export const SettingContext = createContext<{
 
 export function getSettings() {
     const defaultSetting: Settings = {
-        config: { apiKey: "", fontsize: 0.9, prePrompt: false },
+        config: {
+            apiKey: "",
+            fontsize: 0.9,
+            prePrompt: false,
+            saveSession: false,
+        },
         reqParams: { temperature: 0.6 },
     };
-    const settings: string | undefined = localStorage.getItem("settings") as string;
+    const settings: string = localStorage.getItem("settings") as string;
     if (settings === "undefined" || settings === null) {
         // default
         return defaultSetting;
