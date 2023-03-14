@@ -14,7 +14,7 @@ I am GPT or Instant Message GPT, 本地使用的 chatgpt
 2. Markdown 代码块解析
 3. temperature 设置
 4. dark mode
-5. 可以选择开启保存会话
+5. 可以选择开启保存会话（单个会话已经支持，会话列表开发中）
 
 ## 代理问题
 
