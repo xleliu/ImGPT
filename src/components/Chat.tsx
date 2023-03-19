@@ -149,7 +149,7 @@ export default function () {
                         {/* {config.saveSession ? <Session /> : null} */}
                     </HStack>
                     <Spacer />
-                    <ButtonGroup gap="2">
+                    <ButtonGroup gap="4">
                         <ResetChat
                             onResetClick={() => {
                                 if (messages.length > 0) {
