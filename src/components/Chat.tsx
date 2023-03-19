@@ -12,8 +12,8 @@ import {
     MenuButton,
     Progress,
     HStack,
-    useMediaQuery,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { SettingContext } from "../utils/settingContext";
@@ -27,9 +27,6 @@ export default function () {
     const { config, reqParams } = useContext(SettingContext);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
-
-    // 移动端
-    const [isLargerThan480] = useMediaQuery("(min-width: 480px)");
 
     let openai: OpenAIApi;
     const setupOpenAI = () => {
@@ -152,24 +149,9 @@ export default function () {
                         {/* {config.saveSession ? <Session /> : null} */}
                     </HStack>
                     <Spacer />
-                    <ButtonGroup gap="3">
-                        <Button
-                            display={isLargerThan480 ? "" : "none"}
-                            variant="outline"
-                            size="md"
-                            onClick={() => {
-                                setMessages([]);
-                                setMessageStack([]);
-                                setLoading(false);
-                            }}
-                            w="100px"
-                        >
-                            清屏
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="md"
-                            onClick={() => {
+                    <ButtonGroup gap="2">
+                        <ResetChat
+                            onResetClick={() => {
                                 if (messages.length > 0) {
                                     messageStack.at(-1)!.resetContext = true;
                                     setMessageStack([...messageStack]);
@@ -177,10 +159,12 @@ export default function () {
                                 setMessages([]);
                                 setLoading(false);
                             }}
-                            w="100px"
-                        >
-                            重置
-                        </Button>
+                            onCleanClick={() => {
+                                setMessages([]);
+                                setMessageStack([]);
+                                setLoading(false);
+                            }}
+                        />
                         <Button size="md" onClick={handleClick} w="100px">
                             发送
                         </Button>
@@ -188,6 +172,24 @@ export default function () {
                 </Flex>
             </Stack>
         </Stack>
+    );
+}
+
+function ResetChat(props: { onResetClick: () => void; onCleanClick: () => void }) {
+    return (
+        <Menu>
+            <MenuButton variant="outline" size="md" w="100px" as={Button} rightIcon={<ChevronDownIcon />}>
+                重置
+            </MenuButton>
+            <MenuList>
+                <MenuItem borderRadius="0" boxShadow="none" onClick={props.onResetClick}>
+                    仅重置会话
+                </MenuItem>
+                <MenuItem borderRadius="0" boxShadow="none" onClick={props.onCleanClick}>
+                    清空全部内容
+                </MenuItem>
+            </MenuList>
+        </Menu>
     );
 }
 
