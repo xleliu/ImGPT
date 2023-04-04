@@ -34,7 +34,7 @@ export function getSettings() {
             apiKey: "",
             fontsize: 0.9,
             prePrompt: false,
-            saveSession: false,
+            saveSession: true,
         },
         reqParams: { temperature: 0.6 },
     };

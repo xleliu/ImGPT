@@ -26,7 +26,7 @@ I am GPT or Instant Message GPT, 本地使用的 chatgpt
 2. 浮动角标似乎在 Mac 上有 bug，有时候无法显示，不确定是不是性能问题，考虑改成父级全局事件向 item 中 append 元素的方式
 3. 首次填入 key 之后需要双击才会变成 view 状态，似乎不影响使用
 
-## 后续计划：
+## 后续计划（也可能不做了）：
 
 1. slash commands 预埋 prompt（简易版已实现）
 2. 对话框内容导入导出

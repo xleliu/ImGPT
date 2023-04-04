@@ -20,7 +20,6 @@ import { SettingContext } from "../utils/settingContext";
 import { MessageWithDate, updateSession, loadSession } from "../utils/messageStore";
 import Sidebar from "./Sidebar";
 import Dialog from "./Dialog";
-// import Session from "./Session";
 
 export default function () {
     const toast = useToast();
@@ -146,7 +145,6 @@ export default function () {
                 <Flex>
                     <HStack spacing="2">
                         <Sidebar />
-                        {/* {config.saveSession ? <Session /> : null} */}
                     </HStack>
                     <Spacer />
                     <ButtonGroup gap="4">
@@ -241,7 +239,7 @@ function TextField(props: { prompt: string; setPrompt: (s: string) => void; hand
 function SlashCommands(props: { setPrompt: (s: string) => void; inputRef: React.RefObject<HTMLTextAreaElement> }) {
     const { setPrompt, inputRef } = props;
 
-    const commands = ["翻译成英文", "翻译成中文", "查询 Github 仓库", "历史上的今天", "查询菜谱"];
+    const commands = ["翻译成英文", "翻译成中文", "查询 Github 仓库", "查询菜谱"];
     return (
         <MenuList>
             {commands.map((cmd: string, i: number) => (
